@@ -1,6 +1,6 @@
+import { Buffer } from "node:buffer";
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
-
 // Generate test data files
 export const generateTestFiles = async () => {
   console.log('\n----- Generating test files -----');
