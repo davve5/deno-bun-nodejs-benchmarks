@@ -12,7 +12,7 @@ services:
           cpus: '0.25'
           memory: '500MB'
     volumes:
-      - ./results/node_250mhz_500mb:/test_results
+      - ./test_results/node_250mhz_500mb:/test_results
     environment:
       - RUNTIME=node
       - CPU_LIMIT=250MHz
@@ -29,7 +29,7 @@ services:
           cpus: '0.25'
           memory: '500MB'
     volumes:
-      - ./results/deno_250mhz_500mb:/test_results
+      - ./test_results/deno_250mhz_500mb:/test_results
     environment:
       - RUNTIME=deno
       - CPU_LIMIT=250MHz
@@ -46,7 +46,7 @@ services:
           cpus: '0.25'
           memory: '500MB'
     volumes:
-      - ./results/bun_250mhz_500mb:/test_results
+      - ./test_results/bun_250mhz_500mb:/test_results
     environment:
       - RUNTIME=bun
       - CPU_LIMIT=250MHz
@@ -63,7 +63,7 @@ services:
           cpus: '0.5'
           memory: '500MB'
     volumes:
-      - ./results/node_500mhz_500mb:/test_results
+      - ./test_results/node_500mhz_500mb:/test_results
     environment:
       - RUNTIME=node
       - CPU_LIMIT=500MHz
@@ -80,7 +80,7 @@ services:
           cpus: '0.5'
           memory: '500MB'
     volumes:
-      - ./results/deno_500mhz_500mb:/test_results
+      - ./test_results/deno_500mhz_500mb:/test_results
     environment:
       - RUNTIME=deno
       - CPU_LIMIT=500MHz
@@ -97,7 +97,7 @@ services:
           cpus: '0.5'
           memory: '500MB'
     volumes:
-      - ./results/bun_500mhz_500mb:/test_results
+      - ./test_results/bun_500mhz_500mb:/test_results
     environment:
       - RUNTIME=bun
       - CPU_LIMIT=500MHz
@@ -114,7 +114,7 @@ services:
           cpus: '1.0'
           memory: '1GB'
     volumes:
-      - ./results/node_1ghz_1gb:/test_results
+      - ./test_results/node_1ghz_1gb:/test_results
     environment:
       - RUNTIME=node
       - CPU_LIMIT=1GHz
@@ -131,7 +131,7 @@ services:
           cpus: '1.0'
           memory: '1GB'
     volumes:
-      - ./results/deno_1ghz_1gb:/test_results
+      - ./test_results/deno_1ghz_1gb:/test_results
     environment:
       - RUNTIME=deno
       - CPU_LIMIT=1GHz
@@ -148,7 +148,7 @@ services:
           cpus: '1.0'
           memory: '1GB'
     volumes:
-      - ./results/bun_1ghz_1gb:/test_results
+      - ./test_results/bun_1ghz_1gb:/test_results
     environment:
       - RUNTIME=bun
       - CPU_LIMIT=1GHz
@@ -165,7 +165,7 @@ services:
           cpus: '2.0'
           memory: '2GB'
     volumes:
-      - ./results/node_2ghz_2gb:/test_results
+      - ./test_results/node_2ghz_2gb:/test_results
     environment:
       - RUNTIME=node
       - CPU_LIMIT=2GHz
@@ -182,7 +182,7 @@ services:
           cpus: '2.0'
           memory: '2GB'
     volumes:
-      - ./results/deno_2ghz_2gb:/test_results
+      - ./test_results/deno_2ghz_2gb:/test_results
     environment:
       - RUNTIME=deno
       - CPU_LIMIT=2GHz
@@ -199,7 +199,7 @@ services:
           cpus: '2.0'
           memory: '2GB'
     volumes:
-      - ./results/bun_2ghz_2gb:/test_results
+      - ./test_results/bun_2ghz_2gb:/test_results
     environment:
       - RUNTIME=bun
       - CPU_LIMIT=2GHz
@@ -216,7 +216,7 @@ services:
           cpus: '2.0'
           memory: '5GB'
     volumes:
-      - ./results/node_2ghz_5gb:/test_results
+      - ./test_results/node_2ghz_5gb:/test_results
     environment:
       - RUNTIME=node
       - CPU_LIMIT=2GHz
@@ -233,7 +233,7 @@ services:
           cpus: '2.0'
           memory: '5GB'
     volumes:
-      - ./results/deno_2ghz_5gb:/test_results
+      - ./test_results/deno_2ghz_5gb:/test_results
     environment:
       - RUNTIME=deno
       - CPU_LIMIT=2GHz
@@ -250,7 +250,7 @@ services:
           cpus: '2.0'
           memory: '5GB'
     volumes:
-      - ./results/bun_2ghz_5gb:/test_results
+      - ./test_results/bun_2ghz_5gb:/test_results
     environment:
       - RUNTIME=bun
       - CPU_LIMIT=2GHz
