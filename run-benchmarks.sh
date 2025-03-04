@@ -8,8 +8,8 @@ NC='\033[0m' # No Color
 
 # Configuration - these can be overridden by environment variables
 BENCHMARK_SCRIPT="./index.js"
-ITERATIONS=${ITERATIONS:-50}
-SAMPLE_RATE=${SAMPLE_RATE:-10}
+ITERATIONS=${ITERATIONS:-5}
+SAMPLE_RATE=${SAMPLE_RATE:-1}
 RUNTIME=${RUNTIME:-"all"} # Default to all runtimes if not specified
 CPU_LIMIT=${CPU_LIMIT:-"N/A"}
 MEM_LIMIT=${MEM_LIMIT:-"N/A"}
