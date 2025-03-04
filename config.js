@@ -11,7 +11,7 @@ export const runtime = getRuntimeName();
 
 export const createBenchmarkConfig = (iterations = 10, sampleEvery = 2) => {
 	// Create directory path
-	const dirPath = `../visualization/public/data/${iterations}-${sampleEvery}`;
+	const dirPath = `./test_results/${iterations}-${sampleEvery}`;
 
 	// Ensure the directory exists
 	try {

@@ -39,7 +39,7 @@ run_benchmark() {
   print_header "Running benchmark: $service"
   
   # Ensure the results directory exists
-  mkdir -p ./results
+  mkdir -p ./test_results
   
   # Run the specified service
   docker-compose up --build $service
@@ -56,7 +56,7 @@ run_all_benchmarks() {
   print_header "Starting all benchmarks"
   
   # Ensure the results directory exists
-  mkdir -p ./results
+  mkdir -p ./test_results
   
   # Run all services
   docker-compose up --build
@@ -108,7 +108,7 @@ clean_resources() {
   # Remove results directory
   read -p "Do you want to remove all benchmark results? (y/n): " confirm
   if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
-    rm -rf ./results
+    rm -rf ./test_results
     echo -e "${GREEN}Results directory removed${NC}"
   else
     echo -e "${YELLOW}Results directory kept${NC}"
