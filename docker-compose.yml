@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  benchmark_250mhz_500mb:
+  benchmark_node_250mhz_500mb:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -12,9 +12,47 @@ services:
           cpus: '0.25'
           memory: '500MB'
     volumes:
-      - ./benchmark/test_results:/test_results
+      - ./results/node_250mhz_500mb:/test_results
+    environment:
+      - RUNTIME=node
+      - CPU_LIMIT=250MHz
+      - MEM_LIMIT=500MB
 
-  benchmark_500mhz_500mb:
+  benchmark_deno_250mhz_500mb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_250mhz_500mb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '500MB'
+    volumes:
+      - ./results/deno_250mhz_500mb:/test_results
+    environment:
+      - RUNTIME=deno
+      - CPU_LIMIT=250MHz
+      - MEM_LIMIT=500MB
+
+  benchmark_bun_250mhz_500mb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_250mhz_500mb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '500MB'
+    volumes:
+      - ./results/bun_250mhz_500mb:/test_results
+    environment:
+      - RUNTIME=bun
+      - CPU_LIMIT=250MHz
+      - MEM_LIMIT=500MB
+
+  benchmark_node_500mhz_500mb:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -25,12 +63,47 @@ services:
           cpus: '0.5'
           memory: '500MB'
     volumes:
-      - ./benchmark/test_results:/test_results
-    depends_on:
-      benchmark_250mhz_500mb:
-        condition: service_completed_successfully
+      - ./results/node_500mhz_500mb:/test_results
+    environment:
+      - RUNTIME=node
+      - CPU_LIMIT=500MHz
+      - MEM_LIMIT=500MB
 
-  benchmark_1ghz_1gb:
+  benchmark_deno_500mhz_500mb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_500mhz_500mb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '500MB'
+    volumes:
+      - ./results/deno_500mhz_500mb:/test_results
+    environment:
+      - RUNTIME=deno
+      - CPU_LIMIT=500MHz
+      - MEM_LIMIT=500MB
+
+  benchmark_bun_500mhz_500mb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_500mhz_500mb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '500MB'
+    volumes:
+      - ./results/bun_500mhz_500mb:/test_results
+    environment:
+      - RUNTIME=bun
+      - CPU_LIMIT=500MHz
+      - MEM_LIMIT=500MB
+
+  benchmark_node_1ghz_1gb:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -41,12 +114,47 @@ services:
           cpus: '1.0'
           memory: '1GB'
     volumes:
-      - ./benchmark/test_results:/test_results
-    depends_on:
-      benchmark_500mhz_500mb:
-        condition: service_completed_successfully
+      - ./results/node_1ghz_1gb:/test_results
+    environment:
+      - RUNTIME=node
+      - CPU_LIMIT=1GHz
+      - MEM_LIMIT=1GB
 
-  benchmark_2ghz_2gb:
+  benchmark_deno_1ghz_1gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_1ghz_1gb
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: '1GB'
+    volumes:
+      - ./results/deno_1ghz_1gb:/test_results
+    environment:
+      - RUNTIME=deno
+      - CPU_LIMIT=1GHz
+      - MEM_LIMIT=1GB
+
+  benchmark_bun_1ghz_1gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_1ghz_1gb
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: '1GB'
+    volumes:
+      - ./results/bun_1ghz_1gb:/test_results
+    environment:
+      - RUNTIME=bun
+      - CPU_LIMIT=1GHz
+      - MEM_LIMIT=1GB
+
+  benchmark_node_2ghz_2gb:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -57,12 +165,47 @@ services:
           cpus: '2.0'
           memory: '2GB'
     volumes:
-      - ./benchmark/test_results:/test_results
-    depends_on:
-      benchmark_1ghz_1gb:
-        condition: service_completed_successfully
+      - ./results/node_2ghz_2gb:/test_results
+    environment:
+      - RUNTIME=node
+      - CPU_LIMIT=2GHz
+      - MEM_LIMIT=2GB
 
-  benchmark_2ghz_5gb:
+  benchmark_deno_2ghz_2gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_2ghz_2gb
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2GB'
+    volumes:
+      - ./results/deno_2ghz_2gb:/test_results
+    environment:
+      - RUNTIME=deno
+      - CPU_LIMIT=2GHz
+      - MEM_LIMIT=2GB
+
+  benchmark_bun_2ghz_2gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_2ghz_2gb
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2GB'
+    volumes:
+      - ./results/bun_2ghz_2gb:/test_results
+    environment:
+      - RUNTIME=bun
+      - CPU_LIMIT=2GHz
+      - MEM_LIMIT=2GB
+
+  benchmark_node_2ghz_5gb:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -73,7 +216,42 @@ services:
           cpus: '2.0'
           memory: '5GB'
     volumes:
-      - ./benchmark/test_results:/test_results
-    depends_on:
-      benchmark_2ghz_2gb:
-        condition: service_completed_successfully
+      - ./results/node_2ghz_5gb:/test_results
+    environment:
+      - RUNTIME=node
+      - CPU_LIMIT=2GHz
+      - MEM_LIMIT=5GB
+
+  benchmark_deno_2ghz_5gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_2ghz_5gb
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '5GB'
+    volumes:
+      - ./results/deno_2ghz_5gb:/test_results
+    environment:
+      - RUNTIME=deno
+      - CPU_LIMIT=2GHz
+      - MEM_LIMIT=5GB
+
+  benchmark_bun_2ghz_5gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_2ghz_5gb
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '5GB'
+    volumes:
+      - ./results/bun_2ghz_5gb:/test_results
+    environment:
+      - RUNTIME=bun
+      - CPU_LIMIT=2GHz
+      - MEM_LIMIT=5GB

@@ -6,11 +6,17 @@ BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
-# Configuration
-BENCHMARK_SCRIPT="./benchmark/index.js"
-ITERATIONS_ARRAY=(50)
-SAMPLE_RATES_ARRAY=(1 10)
-GENERATE_TEST_FILES=true
+# Configuration - these can be overridden by environment variables
+BENCHMARK_SCRIPT="./benchmarks/index.js"
+ITERATIONS=${ITERATIONS:-50}
+SAMPLE_RATE=${SAMPLE_RATE:-10}
+RUNTIME=${RUNTIME:-"all"} # Default to all runtimes if not specified
+CPU_LIMIT=${CPU_LIMIT:-"N/A"}
+MEM_LIMIT=${MEM_LIMIT:-"N/A"}
+RESULTS_DIR=${RESULTS_DIR:-"/test_results"}
+
+# Create results directory if it doesn't exist
+mkdir -p $RESULTS_DIR
 
 # Function to print section header
 print_header() {
@@ -25,74 +31,67 @@ run_benchmark() {
   local cmd=$2
   local iterations=$3
   local sample_rate=$4
+  local result_file="${RESULTS_DIR}/${runtime}_${CPU_LIMIT}_${MEM_LIMIT}.json"
   
   echo -e "${GREEN}Running $runtime benchmark:${NC} $iterations iterations, sampling every $sample_rate"
+  echo -e "${GREEN}Hardware limits:${NC} CPU: $CPU_LIMIT, Memory: $MEM_LIMIT"
+  echo -e "${GREEN}Results will be saved to:${NC} $result_file"
   
-  # Execute the benchmark command
-  if [ "$runtime" == "Node.js" ]; then
-    $cmd $BENCHMARK_SCRIPT iterations=$iterations sampleEvery=$sample_rate
-    # Only generate test files once
-    GENERATE_TEST_FILES=false
-  elif [ "$runtime" == "Deno" ]; then
-    $cmd run --allow-read --allow-write --allow-env $BENCHMARK_SCRIPT iterations=$iterations sampleEvery=$sample_rate
-  elif [ "$runtime" == "Bun" ]; then
-    $cmd $BENCHMARK_SCRIPT iterations=$iterations sampleEvery=$sample_rate
+  # Execute the benchmark command with result file parameter
+  if [ "$runtime" == "node" ]; then
+    node $BENCHMARK_SCRIPT --iterations=$iterations --sampleEvery=$sample_rate --output=$result_file
+  elif [ "$runtime" == "deno" ]; then
+    deno run --allow-read --allow-write --allow-env $BENCHMARK_SCRIPT --iterations=$iterations --sampleEvery=$sample_rate --output=$result_file
+  elif [ "$runtime" == "bun" ]; then
+    bun $BENCHMARK_SCRIPT --iterations=$iterations --sampleEvery=$sample_rate --output=$result_file
   fi
   
-  echo -e "${GREEN}$runtime benchmark completed${NC} (iterations=$iterations, sampleEvery=$sample_rate)\n"
+  echo -e "${GREEN}$runtime benchmark completed${NC} (iterations=$iterations, sampleEvery=$sample_rate)"
+  echo -e "${GREEN}Results saved to:${NC} $result_file\n"
 }
 
 # Main benchmarking function
 run_all_benchmarks() {
   print_header "Starting JavaScript Runtime Benchmarks"
+  print_header "Hardware Limits: CPU=$CPU_LIMIT, Memory=$MEM_LIMIT"
   
-  # Check if required runtimes are installed
-  if ! command -v node &> /dev/null; then
-    echo -e "${YELLOW}Warning: Node.js not found. Skipping Node.js benchmarks.${NC}"
-    NODE_AVAILABLE=false
-  else
-    NODE_AVAILABLE=true
+  # Check available runtimes
+  if [ "$RUNTIME" = "all" ] || [ "$RUNTIME" = "node" ]; then
+    if command -v node &> /dev/null; then
+      run_benchmark "node" "node" $ITERATIONS $SAMPLE_RATE
+    else
+      echo -e "${YELLOW}Warning: Node.js not found. Skipping Node.js benchmarks.${NC}"
+    fi
   fi
   
-  if ! command -v deno &> /dev/null; then
-    echo -e "${YELLOW}Warning: Deno not found. Skipping Deno benchmarks.${NC}"
-    DENO_AVAILABLE=false
-  else
-    DENO_AVAILABLE=true
+  if [ "$RUNTIME" = "all" ] || [ "$RUNTIME" = "deno" ]; then
+    if command -v deno &> /dev/null; then
+      run_benchmark "deno" "deno" $ITERATIONS $SAMPLE_RATE
+    else
+      echo -e "${YELLOW}Warning: Deno not found. Skipping Deno benchmarks.${NC}"
+    fi
   fi
   
-  if ! command -v bun &> /dev/null; then
-    echo -e "${YELLOW}Warning: Bun not found. Skipping Bun benchmarks.${NC}"
-    BUN_AVAILABLE=false
-  else
-    BUN_AVAILABLE=true
+  if [ "$RUNTIME" = "all" ] || [ "$RUNTIME" = "bun" ]; then
+    if command -v bun &> /dev/null; then
+      run_benchmark "bun" "bun" $ITERATIONS $SAMPLE_RATE
+    else
+      echo -e "${YELLOW}Warning: Bun not found. Skipping Bun benchmarks.${NC}"
+    fi
   fi
-  
-  # Run benchmarks for each combination of iterations and sample rates
-  for iterations in "${ITERATIONS_ARRAY[@]}"; do
-    for sample_rate in "${SAMPLE_RATES_ARRAY[@]}"; do
-      print_header "Benchmark: $iterations iterations, sampling every $sample_rate"
-      
-      # Run Node.js benchmarks
-      if [ "$NODE_AVAILABLE" = true ]; then
-        run_benchmark "Node.js" "node" $iterations $sample_rate
-      fi
-      
-      # Run Deno benchmarks
-      if [ "$DENO_AVAILABLE" = true ]; then
-        run_benchmark "Deno" "deno" $iterations $sample_rate
-      fi
-      
-      # Run Bun benchmarks
-      if [ "$BUN_AVAILABLE" = true ]; then
-        run_benchmark "Bun" "bun" $iterations $sample_rate
-      fi
-    done
-  done
   
   print_header "All benchmarks completed!"
-  echo "Results are available in the visualization/public/data/ directory"
+  echo "Results are available in the $RESULTS_DIR directory"
 }
+
+# Print environment information
+echo -e "${BLUE}Environment Information:${NC}"
+echo -e "Runtime: $RUNTIME"
+echo -e "CPU Limit: $CPU_LIMIT"
+echo -e "Memory Limit: $MEM_LIMIT"
+echo -e "Iterations: $ITERATIONS"
+echo -e "Sample Rate: $SAMPLE_RATE"
+echo -e "Results Directory: $RESULTS_DIR"
 
 # Execute the benchmarks
 run_all_benchmarks
