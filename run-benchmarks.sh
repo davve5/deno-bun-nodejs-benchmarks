@@ -37,6 +37,28 @@ run_benchmark() {
   echo -e "${GREEN}Hardware limits:${NC} CPU: $CPU_LIMIT, Memory: $MEM_LIMIT"
   echo -e "${GREEN}Results will be saved to:${NC} $result_file"
   
+  # Verify runtime is available
+  if [ "$runtime" == "node" ]; then
+    if ! command -v node &> /dev/null; then
+      echo -e "${YELLOW}Error: Node.js not found. Skipping Node.js benchmarks.${NC}"
+      return 1
+    fi
+    echo "Node.js version: $(node --version)"
+    echo "NPM version: $(npm --version)"
+  elif [ "$runtime" == "deno" ]; then
+    if ! command -v deno &> /dev/null; then
+      echo -e "${YELLOW}Error: Deno not found. Skipping Deno benchmarks.${NC}"
+      return 1
+    fi
+    echo "Deno version: $(deno --version | head -n 1)"
+  elif [ "$runtime" == "bun" ]; then
+    if ! command -v bun &> /dev/null; then
+      echo -e "${YELLOW}Error: Bun not found. Skipping Bun benchmarks.${NC}"
+      return 1
+    fi
+    echo "Bun version: $(bun --version)"
+  fi
+  
   # Execute the benchmark command with result file parameter
   if [ "$runtime" == "node" ]; then
     node $BENCHMARK_SCRIPT --iterations=$iterations --sampleEvery=$sample_rate --output=$result_file
@@ -46,8 +68,15 @@ run_benchmark() {
     bun $BENCHMARK_SCRIPT --iterations=$iterations --sampleEvery=$sample_rate --output=$result_file
   fi
   
-  echo -e "${GREEN}$runtime benchmark completed${NC} (iterations=$iterations, sampleEvery=$sample_rate)"
-  echo -e "${GREEN}Results saved to:${NC} $result_file\n"
+  # Check if benchmark ran successfully
+  if [ $? -eq 0 ]; then
+    echo -e "${GREEN}$runtime benchmark completed successfully${NC} (iterations=$iterations, sampleEvery=$sample_rate)"
+    echo -e "${GREEN}Results saved to:${NC} $result_file\n"
+    return 0
+  else
+    echo -e "${YELLOW}$runtime benchmark failed${NC} (iterations=$iterations, sampleEvery=$sample_rate)"
+    return 1
+  fi
 }
 
 # Main benchmarking function
