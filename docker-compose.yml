@@ -1,0 +1,79 @@
+version: '3.9'
+
+services:
+  benchmark_250mhz_500mb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_250mhz_500mb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '500MB'
+    volumes:
+      - ./benchmark/test_results:/test_results
+
+  benchmark_500mhz_500mb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_500mhz_500mb
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '500MB'
+    volumes:
+      - ./benchmark/test_results:/test_results
+    depends_on:
+      benchmark_250mhz_500mb:
+        condition: service_completed_successfully
+
+  benchmark_1ghz_1gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_1ghz_1gb
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: '1GB'
+    volumes:
+      - ./benchmark/test_results:/test_results
+    depends_on:
+      benchmark_500mhz_500mb:
+        condition: service_completed_successfully
+
+  benchmark_2ghz_2gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_2ghz_2gb
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2GB'
+    volumes:
+      - ./benchmark/test_results:/test_results
+    depends_on:
+      benchmark_1ghz_1gb:
+        condition: service_completed_successfully
+
+  benchmark_2ghz_5gb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: benchmark_2ghz_5gb
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '5GB'
+    volumes:
+      - ./benchmark/test_results:/test_results
+    depends_on:
+      benchmark_2ghz_2gb:
+        condition: service_completed_successfully
