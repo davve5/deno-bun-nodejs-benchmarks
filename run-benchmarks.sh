@@ -7,7 +7,7 @@ YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
 # Configuration - these can be overridden by environment variables
-BENCHMARK_SCRIPT="./benchmarks/index.js"
+BENCHMARK_SCRIPT="./index.js"
 ITERATIONS=${ITERATIONS:-50}
 SAMPLE_RATE=${SAMPLE_RATE:-10}
 RUNTIME=${RUNTIME:-"all"} # Default to all runtimes if not specified
